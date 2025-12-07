@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Simulador de Nota Fiscal</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f4f4; }
+        .container { max-width: 600px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        h1 { color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px; }
+        label { display: block; margin-top: 10px; font-weight: bold; }
+        input[type="number"] { width: 90%; padding: 8px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 4px; }
+        input[type="submit"] { background-color: #0056b3; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; }
+        .resultado, .imposto { margin-top: 15px; padding: 10px; border-radius: 5px; }
+        .resultado { background-color: #e6f7ff; border: 1px solid #99d6ff; font-size: 1.2em; font-weight: bold; color: #0056b3; }
+        .imposto { background-color: #fff3cd; border: 1px solid #ffecb5; color: #856404; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧾 Simulador de Nota Fiscal</h1>
+        
+        <p>Calcule o valor líquido após a dedução do imposto em percentual.</p>
+
+        <form method="post" action="{% url 'simular_nf' %}">
+            {% csrf_token %} 
+            
+            <label for="valor_bruto">Valor Bruto do Serviço (R$):</label>
+            <input type="number" step="0.01" id="valor_bruto" name="valor_bruto" required value="{{ valor_bruto|default:'' }}">
+
+            <label for="imposto_percentual">Imposto em Percentual (%):</label>
+            <input type="number" step="0.01" id="imposto_percentual" name="imposto_percentual" required value="{{ imposto_percentual|default:'' }}">
+            
+            <input type="submit" value="Calcular Valor Líquido">
+        </form>
+
+        {% if valor_liquido is not None and erro is None %}
+            <div class="imposto">
+                Imposto a ser Deduzido: R$ {{ valor_imposto|floatformat:2 }} ({{ imposto_percentual }}%)
+            </div>
+            <div class="resultado">
+                Valor Líquido a Receber: R$ {{ valor_liquido|floatformat:2 }}
+            </div>
+        {% elif erro %}
+            <div style="color: red; margin-top: 20px;">
+                {{ erro }}
+            </div>
+        {% endif %}
+
+    </div>
+</body>
+</html>
