@@ -45,7 +45,32 @@
                 {{ erro }}
             </div>
         {% endif %}
+<script>
+function calcularSimulador() {
+    // 1. Capturar os valores
+    const valorBrutoInput = document.getElementById('valorBruto').value;
+    const impostoPercentualInput = document.getElementById('impostoPercentual').value;
 
+    // Converte para número (float)
+    const valorBruto = parseFloat(valorBrutoInput);
+    const impostoPercentual = parseFloat(impostoPercentualInput);
+
+    // Validação básica
+    if (isNaN(valorBruto) || isNaN(impostoPercentual)) {
+        alert("Por favor, insira valores numéricos válidos.");
+        return;
+    }
+
+    // 2. A Lógica do Cálculo (A mesma que estava no Python!)
+    const taxaImposto = impostoPercentual / 100;
+    const valorImposto = valorBruto * taxaImposto;
+    const valorLiquido = valorBruto - valorImposto;
+
+    // 3. Exibir o resultado na tela (com 2 casas decimais)
+    document.getElementById('resultadoImposto').textContent = 'R$ ' + valorImposto.toFixed(2);
+    document.getElementById('resultadoLiquido').textContent = 'R$ ' + valorLiquido.toFixed(2);
+}
+</script>
     </div>
 </body>
 </html>
